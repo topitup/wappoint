@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    
+    <Properties>
+        <Property name="log-path">/vs/api/logs/international_airtime</Property>
+    </Properties>
+
+    <Appenders>
+        <RollingRandomAccessFile name="RollingRandomAccessFile" fileName="${log-path}/international_airtime"
+                    filePattern="${log-path}/$${date:yyyyMM}/ding-%d{yyyyMMdd-HH}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d{yyyyMMdd|HH:mm:ss.SSS}|%m%n</pattern>
+            </PatternLayout>
+            <Policies>
+              <TimeBasedTriggeringPolicy interval="4" modulate="true"/>
+              <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+
+        <Root level="trace">
+            <AppenderRef ref="RollingRandomAccessFile"/>
+        </Root>
+  
+    </Loggers>
+
+</Configuration>
