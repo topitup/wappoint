@@ -8,6 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
@@ -64,22 +68,63 @@ public class Settings {
         logger.info("Programmatic timeout occurred.");
     }
 
-    @Schedule(second="*/15",minute="*",hour = "*", persistent = false)
-    public void automaticTimeout() {
-        this.setLastAutomaticTimeout(new Date());
-        logger.info("<<<<<<<<<<<<<<<<<<<New Session is Created>>>>>>>>>>>>>>>>>>>>>");
-        Api api=new Api();
-        java.util.Date dtmnow = new java.util.Date();
-        String strDate = String.format("%1$tY-%1$tm-%1$td", dtmnow);
-        api.get_txns(strDate,strDate);
-    }
-@Schedule(dayOfMonth="6",second="0", minute="42", hour="16", persistent = false)
+//     @Schedule(second="*",minute="*/4",hour = "*", persistent = false)
+//   //@Schedule(minute="*",hour = "*/12", persistent = false)
+//    public void automaticTimeout() {
+//        this.setLastAutomaticTimeout(new Date());
+//       logger.info("<<<<<<<<<<<<<<<<<<<New Session is Created>>>>>>>>>>>>>>>>>>>>>");
+//       Api api=new Api();
+//       java.util.Date dtmnow = new java.util.Date();
+//        String strDate = String.format("%1$tY-%1$tm-%1$td ", dtmnow);
+//         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//           DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//           LocalDateTime currentdt=LocalDateTime.now();
+//            LocalDateTime prvdt=currentdt.minusMinutes(2);
+//    //api.get_txns(prvdt.format(formatter),currentdt.format(formatter));
+// 
+//    //api.get_txns(prvdt.format(formatter1),currentdt.format(formatter));
+//  
+//    api.get_txns(currentdt.format(formatter),currentdt.format(formatter));
+// }
+//    
+  
+    @Schedule(dayOfMonth="6",second="0", minute="42", hour="16", persistent = false)
     public void automaticTimeout1() {
         this.setLastAutomaticTimeout(new Date());
         logger.info("<<<<<<<<<<<<<<<<<<<System Initiated2>>>>>>>>>>>>>>>>>>>>>");
         Api api=new Api();
   
     }
+     @Schedule(minute="30", hour="00", persistent = false)
+    public void automaticTimeout2() throws ParseException {
+        this.setLastAutomaticTimeout(new Date());
+        logger.info("<<<<<<<<<<<<<<<<<<<System Initiated2>>>>>>>>>>>>>>>>>>>>>");
+      java.util.Date dtmnow = new java.util.Date();
+String strDate = String.format("%1$tY-%1$tm-%1$td ", dtmnow);
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+LocalDateTime currentdt=LocalDateTime.now();
+ LocalDateTime yesterday=currentdt.minusDays(1);
+        Api api=new Api();
+    api.do_auto_recon(yesterday.format(formatter),"NA");
+  
+    }
+  
+//    @Schedule(minute="00", hour="*/3", persistent = false)
+//    public void automaticTimeout3() throws ParseException {
+//        this.setLastAutomaticTimeout(new Date());
+//        logger.info("<<<<<<<<<<<<<<<<<<<System Initiated2>>>>>>>>>>>>>>>>>>>>>");
+//      java.util.Date dtmnow = new java.util.Date();
+//String strDate = String.format("%1$tY-%1$tm-%1$td ", dtmnow);
+//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//LocalDateTime currentdt=LocalDateTime.now();
+// LocalDateTime yesterday=currentdt.minusDays(1);
+//        Api api=new Api();
+//        api.do_auto_recon(currentdt.format(formatter),"NA");
+//  
+//    }
     public String getLastProgrammaticTimeout() {
         if (lastProgrammaticTimeout != null) {
             return lastProgrammaticTimeout.toString();
